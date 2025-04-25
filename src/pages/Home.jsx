@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-import {obtenerAgenda, obtenerContactos } from "../funciones/funcionesGlobales.js";
+import { obtenerAgenda, obtenerContactos } from "../funciones/funcionesGlobales.js";
 
 export const Home = () => {
 
@@ -10,22 +10,29 @@ export const Home = () => {
 
 	useEffect(() => {
 		const miFetchparalaAgenda = async () => {
-			const data = await obtenerAgenda()
-			dispatch({type: 'crearAgenda', payload: data})
+			try {
+				const data = await obtenerAgenda()
+				dispatch({ type: 'crearAgenda', payload: data })
+			} catch (error) {
+				console.error("Error obteniendo la agenda:", error)
+			}
 		}
 		miFetchparalaAgenda()
 	}, [])
 
 	useEffect(() => {
 		const miFetchparalosContactos = async () => {
-			const data = await obtenerContactos()
-			console.log(data);
-			
-			dispatch({type: 'obtenerContactos', payload: data})
+			try {
+				const data = await obtenerContactos()
+				console.log(data)
+				dispatch({ type: 'obtenerContactos', payload: data })
+			} catch (error) {
+				console.error("Error obteniendo los contactos:", error)
 			}
+		}
 		miFetchparalosContactos()
-
 	}, [])
+
 	console.log("Contactos en store:", store.contactos);
 
 	return (
@@ -34,8 +41,8 @@ export const Home = () => {
 
 			{store.contactos?.map((elemento) => (
 				<div className="card m-3 shadow-sm"
-				key={elemento.id} 
-				style={{ width: '30rem' }}>
+					key={elemento.id}
+					style={{ width: '30rem' }}>
 					<div className="card-body">
 						<h5 className="card-title">{elemento.name}</h5>
 						<h6 className="card-subtitle mb-2 text-muted">{elemento.email}</h6>
