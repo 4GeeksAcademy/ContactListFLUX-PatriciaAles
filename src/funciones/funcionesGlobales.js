@@ -57,5 +57,14 @@ export const crearNuevoContacto = async (nuevocontacto) => {
 }
 
 export const obtenerContactos = async () => {
-
+    try {
+        const response = await fetch('https://playground.4geeks.com/contact/agendas/Calenine/contacts')
+        const data = await response.json()
+        console.log("trayendo contactos --->: ", data)
+        return data.contacts
+        ;
+    } catch (error) {
+        console.log("No se pudieron traer los contactos ", error);
+        
+    }
 }

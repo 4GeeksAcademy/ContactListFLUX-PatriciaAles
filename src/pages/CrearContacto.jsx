@@ -1,11 +1,11 @@
 import useGlobalReducer from "../hooks/useGlobalReducer";
-import { crearNuevoContacto } from "../funciones/funcionesGlobales";
+import { crearNuevoContacto, obtenerContactos } from "../funciones/funcionesGlobales";
 import { useEffect, useState } from "react";
 
 export const CrearContacto = () => {
 
   // necesito guardar los datos de manera local mientras relleno los input, antes de enviar el formulario (con miContacto actualizado)
-  const [miContacto, setMiContacto] = useState({
+  const [miContacto, setMicontacto] = useState({
     name: "",
     phone: "",
     email: "",
@@ -16,7 +16,7 @@ export const CrearContacto = () => {
 
   // siempre que haya un input habrá un handleChange para guardar en mi estado el valor de los input
   const handleChange = (e) => {
-    setMiContacto({
+    setMicontacto({
       ...miContacto,
       [e.target.name]: e.target.value
     })
@@ -31,6 +31,10 @@ export const CrearContacto = () => {
     e.preventDefault()
     const peticionCrearContacto = await crearNuevoContacto(miContacto) //tengo que pasarle como parametro a mi funcion crearNuevoContacto mi estado que es el que tiene de momento los datos (el objeto)
     dispatch({ type: 'crearContacto', payload: peticionCrearContacto })
+
+    const contactosActualizados = await obtenerContactos();
+    dispatch({ type: "obtenerContactos", payload: contactosActualizados });
+
     setMicontacto({
       name: "",
       phone: "",
