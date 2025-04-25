@@ -1,10 +1,11 @@
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { crearNuevoContacto } from "../funciones/funcionesGlobales";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const CrearContacto = () => {
 
-  const [miContacto, setMicontacto] = useState({
+  // necesito guardar los datos de manera local mientras relleno los input, antes de enviar el formulario (con miContacto actualizado)
+  const [miContacto, setMiContacto] = useState({
     name: "",
     phone: "",
     email: "",
@@ -15,14 +16,15 @@ export const CrearContacto = () => {
 
   // siempre que haya un input habrá un handleChange para guardar en mi estado el valor de los input
   const handleChange = (e) => {
-    setMicontacto({
+    setMiContacto({
       ...miContacto,
       [e.target.name]: e.target.value
     })
-    console.log(miContacto);
-
   }
 
+  useEffect(() => {
+    console.log(miContacto);
+  }, [miContacto])
 
   // el handleSubmit será el que envie los datos pero como es asincrona con await delante, y para que no de error porque no se lo puedo pasar siendo asincrono a payload lo guardo en una variable, y es esa variable que guarda lo que me traigo con crearNuevoContacto lo que le paso como payload (los datos que recibo -> envio para actualizar el estado global)
   const handleSubmit = async (e) => {
