@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { obtenerAgenda, obtenerContactos } from "../funciones/funcionesGlobales.js";
+import { TarjetaDeContacto } from "./TarjetaDeContacto.jsx";
+
 
 export const Home = () => {
 
 	const { store, dispatch } = useGlobalReducer()
 
-	// dispatch({ type: 'crearAgenda', payload: data })
 
 	useEffect(() => {
 		const miFetchparalaAgenda = async () => {
@@ -26,6 +27,7 @@ export const Home = () => {
 				const data = await obtenerContactos()
 				console.log(data)
 				dispatch({ type: 'obtenerContactos', payload: data })
+				return data
 			} catch (error) {
 				console.error("Error obteniendo los contactos:", error)
 			}
@@ -33,32 +35,17 @@ export const Home = () => {
 		miFetchparalosContactos()
 	}, [])
 
-	console.log("Contactos en store:", store.contactos);
+
+	// console.log("Contactos en store:", store.contactos);
+	console.log("Nombre de la agenda: ---> ", store.agenda?.slug);
+
 
 	return (
 		<div className="text-center mt-5">
-			<h1>📖 Contact List 📖 </h1>
-
-			{store.contactos?.map((elemento) => (
-				<div className="card m-3 shadow-sm"
-					key={elemento.id}
-					style={{ width: '30rem' }}>
-					<div className="card-body">
-						<h5 className="card-title">{elemento.name}</h5>
-						<h6 className="card-subtitle mb-2 text-muted">{elemento.email}</h6>
-						<p className="card-text">
-							<strong>Dirección:</strong>
-							{elemento.address}
-						</p>
-						<p className="card-text">
-							<strong>Teléfono:</strong>
-							{elemento.phone}
-						</p>
-					</div>
-				</div>
-
+			<h1>📖 Contact List de: {store.agenda?.slug} 📖 </h1>
+			{store.contactos?.map((elemento, _) => (
+					<TarjetaDeContacto key={elemento.id} name={elemento.name} address={elemento.address} email={elemento.email} phone={elemento.phone}/>
 			))}
-
 		</div>
 	);
 }; 
